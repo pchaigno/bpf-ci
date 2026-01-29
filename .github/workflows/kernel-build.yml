@@ -46,12 +46,7 @@ on:
 jobs:
   build:
     name: build kernel and selftests ${{ inputs.release && '-O2' || '' }}
-    runs-on:
-      - ${{ github.repository == 'kernel-patches/bpf-rc' && 'ubuntu-latest'
-         || format('codebuild-bpf-ci-{0}-{1}', github.run_id, github.run_attempt) }}
-      # AWS docs about image override: https://docs.aws.amazon.com/codebuild/latest/userguide/sample-github-action-runners-update-labels.html
-      - image:${{ inputs.arch == 'aarch64' && 'custom-arm-ghcr.io/kernel-patches/runner:kbuilder-debian-aarch64'
-               || 'custom-linux-ghcr.io/kernel-patches/runner:kbuilder-debian-x86_64' }}
+    runs-on: ubuntu-latest
     env:
         ARTIFACTS_ARCHIVE: "vmlinux-${{ inputs.arch }}-${{ inputs.toolchain_full }}.tar.zst"
         BPF_NEXT_FETCH_DEPTH: 64 # A bit of history is needed to facilitate incremental builds
